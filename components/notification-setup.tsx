@@ -9,11 +9,9 @@ export default function NotificationSetup() {
   const [showPrompt, setShowPrompt] = useState(false);
   
   useEffect(() => {
-    // Check if notifications are already set up
     const notificationsSetup = localStorage.getItem('notificationsSetup');
     
     if (!notificationsSetup) {
-      // Wait a bit before showing the prompt
       const timer = setTimeout(() => {
         setShowPrompt(true);
       }, 3000);
@@ -24,21 +22,14 @@ export default function NotificationSetup() {
   
   const handleEnableNotifications = async () => {
     try {
-      // Register service worker
       await registerServiceWorker();
-      
-      // Request permission
       const permissionGranted = await requestNotificationPermission();
       
       if (permissionGranted) {
-        // Subscribe to push notifications
         const subscription = await subscribeUserToPush();
         
         if (subscription) {
-          // In a real app, you would send this subscription to your server
           console.log('User subscribed to push notifications:', subscription);
-          
-          // Mark as set up
           localStorage.setItem('notificationsSetup', 'true');
         }
       }
@@ -64,13 +55,14 @@ export default function NotificationSetup() {
             <div className="flex items-center gap-2">
               <div className="bg-blue-100 p-2 rounded-full">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-blue-600">
-                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-                <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-              </svg>
-            </div>
-            <div>
-              <h3 className="font-medium">Cigarette Timer Notifications</h3>
-              <p className="text-sm text-gray-500">Get notified when you can smoke or when to skip for more XP.</p>
+                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                  <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="font-medium">Cigarette Timer Notifications</h3>
+                <p className="text-sm text-gray-500">Get notified when you can smoke or when to skip for more XP.</p>
+              </div>
             </div>
           </div>
           
@@ -115,4 +107,3 @@ export default function NotificationSetup() {
     </Dialog>
   );
 }
-
