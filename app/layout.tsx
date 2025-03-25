@@ -17,6 +17,7 @@ export const metadata: Metadata = {
   ],
     generator: 'v0.dev'
 }
+// Triggering first deploy to Vercel
 
 export default function RootLayout({
   children,
