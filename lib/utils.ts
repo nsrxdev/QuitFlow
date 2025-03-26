@@ -103,3 +103,10 @@ export function getWeekInfo(weekNumber: number): {
   return weekInfo[weekNumber - 1] || weekInfo[0]
 }
 
+
+// Calculates how many cigarettes are allowed today based on starting point and progress
+export function calculateAllowedCigarettes(startingCigsPerDay: number, daysPassed: number): number {
+  const totalDays = 42; // 6 weeks = 42 days
+  const remaining = Math.max(0, startingCigsPerDay - Math.floor((startingCigsPerDay / totalDays) * daysPassed));
+  return remaining;
+}
