@@ -18,18 +18,13 @@ export async function signUp(
   }
 
   if (data.user) {
-    const userData = {
-      id: data.user.id,
+    const { error: profileError } = await createUser(
+      data.user.id,
       email,
       dailyCigarettes,
       symptoms,
-    }
-
-    if (photoUrl) {
-      userData['photoUrl'] = photoUrl
-    }
-
-    const { error: profileError } = await createUser(userData)
+      photoUrl // this can be undefined if not provided
+    )
 
     if (profileError) {
       return { error: profileError }
@@ -37,20 +32,4 @@ export async function signUp(
   }
 
   return { data }
-}
-
-export async function signIn(email: string, password: string) {
-  return await supabase.auth.signInWithPassword({
-    email,
-    password,
-  })
-}
-
-export async function signOut() {
-  return await supabase.auth.signOut()
-}
-
-export async function getCurrentUser() {
-  const { data } = await supabase.auth.getUser()
-  return data?.user
 }
