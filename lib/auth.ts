@@ -21,12 +21,12 @@ export async function signUp(
 
   if (user?.id) {
     const { error: profileError } = await createUser(
-      user.id, // MUST match auth.uid()
       email,
       dailyCigarettes,
       symptoms,
       photoUrl ?? null
     )
+    
 
     if (profileError) {
       return { error: profileError }

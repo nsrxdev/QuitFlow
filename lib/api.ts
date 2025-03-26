@@ -2,23 +2,19 @@ import { supabase } from "./supabase"
 
 // Create user and initial data on signup
 export async function createUser(
-  id: string,
   email: string,
   dailyCigarettes: number,
   symptoms: string,
   photoUrl?: string,
 ) {
   return await supabase.from("users").insert({
-    id, // ✅ this is required for RLS check to pass
     email,
     daily_cigarettes: dailyCigarettes,
     symptoms,
-    photo_url: photoUrl || null, // fallback to null if empty
-    xp: 0,
-    current_week: 1,
-    last_cigarette_time: new Date().toISOString(),
+    photo_url: photoUrl,
   })
 }
+
 
 
 
