@@ -5,8 +5,7 @@ export async function signUp(
   email: string,
   password: string,
   dailyCigarettes: number,
-  symptoms: string,
-  photoUrl?: string,
+  symptoms: string
 ) {
   const { data, error } = await supabase.auth.signUp({
     email,
@@ -21,12 +20,11 @@ export async function signUp(
 
   if (user?.id) {
     const { error: profileError } = await createUser(
+      user.id,
       email,
       dailyCigarettes,
-      symptoms,
-      photoUrl ?? null
+      symptoms
     )
-    
 
     if (profileError) {
       return { error: profileError }
