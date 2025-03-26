@@ -61,7 +61,7 @@ export default function SignupForm() {
         password,
         dailyCigarettes,
         allSymptoms.join(", "),
-        null // no photo
+        null // No photo
       )
 
       if (error) throw new Error(error.message)
@@ -76,11 +76,15 @@ export default function SignupForm() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-gradient-to-b from-blue-50 to-white">
-      <div className="w-full max-w-md space-y-6 bg-white p-6 rounded-lg shadow-sm text-black">
+      <div className="w-full max-w-md space-y-6 bg-white p-6 rounded-lg shadow-sm">
         <div className="text-center">
-          <h1 className="text-2xl font-bold tracking-tight">Create Your Account</h1>
+          <h1 className="text-2xl font-bold tracking-tight text-black">Create Your Account</h1>
           <p className="mt-2 text-sm text-gray-600">
-            {step === 1 ? "Step 1: Account Details" : step === 2 ? "Step 2: Smoking Habits" : "Step 3: Final Step"}
+            {step === 1
+              ? "Step 1: Account Details"
+              : step === 2
+              ? "Step 2: Smoking Habits"
+              : "Step 3: Final Step"}
           </p>
         </div>
 
@@ -96,7 +100,7 @@ export default function SignupForm() {
                   onChange={(e) => setEmail(e.target.value)}
                   required
                   placeholder="your@email.com"
-                  className="text-black placeholder:text-gray-500"
+                  className="bg-black text-white placeholder:text-gray-400"
                 />
               </div>
 
@@ -110,9 +114,11 @@ export default function SignupForm() {
                   required
                   minLength={6}
                   placeholder="Create a secure password"
-                  className="text-black placeholder:text-gray-500"
+                  className="bg-black text-white placeholder:text-gray-400"
                 />
-                <p className="text-xs text-gray-500">Password must be at least 6 characters</p>
+                <p className="text-xs text-gray-500">
+                  Password must be at least 6 characters
+                </p>
               </div>
             </>
           )}
@@ -120,16 +126,20 @@ export default function SignupForm() {
           {step === 2 && (
             <>
               <div className="space-y-2">
-                <Label htmlFor="dailyCigarettes">How many cigarettes do you smoke per day?</Label>
+                <Label htmlFor="dailyCigarettes">
+                  How many cigarettes do you smoke per day?
+                </Label>
                 <Input
                   id="dailyCigarettes"
                   type="number"
                   value={dailyCigarettes}
-                  onChange={(e) => setDailyCigarettes(parseInt(e.target.value))}
+                  onChange={(e) =>
+                    setDailyCigarettes(parseInt(e.target.value) || 0)
+                  }
                   required
                   min={1}
                   max={100}
-                  className="text-black"
+                  className="bg-black text-white placeholder:text-gray-400"
                 />
               </div>
 
@@ -143,7 +153,10 @@ export default function SignupForm() {
                         checked={selectedSymptoms.includes(symptom)}
                         onCheckedChange={() => handleSymptomToggle(symptom)}
                       />
-                      <label htmlFor={`symptom-${symptom}`} className="text-sm">
+                      <label
+                        htmlFor={`symptom-${symptom}`}
+                        className="text-sm text-black"
+                      >
                         {symptom}
                       </label>
                     </div>
@@ -152,13 +165,15 @@ export default function SignupForm() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="symptoms">Other symptoms or notes (optional)</Label>
+                <Label htmlFor="symptoms">
+                  Other symptoms or notes (optional)
+                </Label>
                 <Textarea
                   id="symptoms"
                   value={symptoms}
                   onChange={(e) => setSymptoms(e.target.value)}
                   placeholder="Describe any other symptoms or concerns..."
-                  className="h-20 text-black placeholder:text-gray-500"
+                  className="h-20 bg-black text-white placeholder:text-gray-400"
                 />
               </div>
             </>
@@ -166,21 +181,32 @@ export default function SignupForm() {
 
           {step === 3 && (
             <div className="text-sm text-gray-600 text-center">
-              You’re ready to quit! Click "Create Account" to start your journey.
+              You’re ready to quit! Click <b>"Create Account"</b> to start your journey.
             </div>
           )}
 
           {error && (
-            <div className="p-3 text-sm text-red-600 bg-red-50 rounded-md">{error}</div>
+            <div className="p-3 text-sm text-red-600 bg-red-50 rounded-md">
+              {error}
+            </div>
           )}
 
           <div className="flex justify-between">
             {step > 1 && (
-              <Button type="button" variant="outline" onClick={() => setStep(step - 1)} disabled={loading}>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setStep(step - 1)}
+                disabled={loading}
+              >
                 Back
               </Button>
             )}
-            <Button type="submit" className={step < 3 ? "ml-auto" : ""} disabled={loading}>
+            <Button
+              type="submit"
+              className={step < 3 ? "ml-auto" : ""}
+              disabled={loading}
+            >
               {step < 3 ? "Next" : "Create Account"}
             </Button>
           </div>
