@@ -18,28 +18,37 @@ export async function signUp(
   }
 
   const user = data?.user
-  if (user) {
+
+  if (user?.id) {
     const { error: profileError } = await createUser(
-      user.id,
+      user.id, // MUST match auth.uid()
       email,
       dailyCigarettes,
       symptoms,
-      photoUrl ?? null // fallback to null if undefined
+      photoUrl ?? null
     )
 
     if (profileError) {
       return { error: profileError }
     }
+  } else {
+    return { error: { message: "User creation failed or user ID missing." } }
   }
 
   return { data }
 }
 
 export async function signIn(email: string, password: string) {
-  return await supabase.auth.signInWithPassword({
+  const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
   })
+
+  if (error) {
+    return { error }
+  }
+
+  return { data }
 }
 
 export async function signOut() {
