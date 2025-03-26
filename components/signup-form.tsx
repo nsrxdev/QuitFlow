@@ -129,7 +129,8 @@ export default function SignupForm() {
           {step === 1 && (
             <>
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email" className="text-gray-900 dark:text-gray-100">Email</Label>
+
                 <Input
                   id="email"
                   type="email"
@@ -141,7 +142,8 @@ export default function SignupForm() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password" className="text-gray-900 dark:text-gray-100">Password</Label>
+
                 <Input
                   id="password"
                   type="password"
@@ -182,9 +184,10 @@ export default function SignupForm() {
                         onCheckedChange={() => handleSymptomToggle(symptom)}
                       />
                       <label
-                        htmlFor={`symptom-${symptom}`}
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                      >
+                 htmlFor={`symptom-${symptom}`}
+          className="text-sm font-medium text-gray-900 dark:text-gray-100 leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+          >
+
                         {symptom}
                       </label>
                     </div>
@@ -195,12 +198,13 @@ export default function SignupForm() {
               <div className="space-y-2">
                 <Label htmlFor="symptoms">Other symptoms or notes (optional)</Label>
                 <Textarea
-                  id="symptoms"
-                  value={symptoms}
-                  onChange={(e) => setSymptoms(e.target.value)}
-                  placeholder="Describe any other symptoms or concerns..."
-                  className="h-20"
-                />
+  id="symptoms"
+  value={symptoms}
+  onChange={(e) => setSymptoms(e.target.value)}
+  placeholder="Describe any other symptoms or concerns..."
+  className="h-20 bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100"
+/>
+
               </div>
             </>
           )}
