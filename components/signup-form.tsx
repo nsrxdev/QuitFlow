@@ -64,6 +64,8 @@ export default function SignupForm() {
         null // No photo
       )
 
+      
+
       if (error) throw new Error(error.message)
 
       router.push("/login?message=Check your email to confirm your account")
