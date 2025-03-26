@@ -17,13 +17,14 @@ export async function signUp(
     return { error }
   }
 
-  if (data.user) {
+  const user = data?.user
+  if (user) {
     const { error: profileError } = await createUser(
-      data.user.id,
+      user.id,
       email,
       dailyCigarettes,
       symptoms,
-      photoUrl // this can be undefined if not provided
+      photoUrl ?? null // fallback to null if undefined
     )
 
     if (profileError) {
@@ -32,4 +33,20 @@ export async function signUp(
   }
 
   return { data }
+}
+
+export async function signIn(email: string, password: string) {
+  return await supabase.auth.signInWithPassword({
+    email,
+    password,
+  })
+}
+
+export async function signOut() {
+  return await supabase.auth.signOut()
+}
+
+export async function getCurrentUser() {
+  const { data } = await supabase.auth.getUser()
+  return data?.user
 }
