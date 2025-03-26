@@ -18,8 +18,18 @@ export async function signUp(
   }
 
   if (data.user) {
-    // Create user profile
-    const { error: profileError } = await createUser(data.user.id, email, dailyCigarettes, symptoms, photoUrl)
+    const userData = {
+      id: data.user.id,
+      email,
+      dailyCigarettes,
+      symptoms,
+    }
+
+    if (photoUrl) {
+      userData['photoUrl'] = photoUrl
+    }
+
+    const { error: profileError } = await createUser(userData)
 
     if (profileError) {
       return { error: profileError }
@@ -44,4 +54,3 @@ export async function getCurrentUser() {
   const { data } = await supabase.auth.getUser()
   return data?.user
 }
-

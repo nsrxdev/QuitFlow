@@ -1,19 +1,19 @@
 import { supabase } from "./supabase"
 
 // Create user and initial data on signup
-export async function createUser(
-  id: string,
-  email: string,
-  dailyCigarettes: number,
-  symptoms: string,
-  photoUrl?: string,
-) {
+export async function createUser(user: {
+  id: string
+  email: string
+  dailyCigarettes: number
+  symptoms: string
+  photoUrl?: string
+}) {
   return await supabase.from("users").insert({
-    id,
-    email,
-    daily_cigarettes: dailyCigarettes,
-    symptoms,
-    photo_url: photoUrl,
+    id: user.id,
+    email: user.email,
+    daily_cigarettes: user.dailyCigarettes,
+    symptoms: user.symptoms,
+    photo_url: user.photoUrl || null,
     xp: 0,
     current_week: 1,
     last_cigarette_time: new Date().toISOString(),
@@ -23,28 +23,17 @@ export async function createUser(
 // Log smoking behavior
 export async function logSmoking(userId: string, smoked: boolean) {
   const { data: userData, error: userError } = await supabase.from("users").select("xp").eq("id", userId).single()
+  if (userError) return { error: userError }
 
-  if (userError) {
-    return { error: userError }
-  }
-
-  // Update XP based on smoking behavior
   const xpToAdd = smoked ? 4 : 10
   const newXp = (userData?.xp || 0) + xpToAdd
 
-  // Update last cigarette time if smoked
   const updateData: any = { xp: newXp }
-  if (smoked) {
-    updateData.last_cigarette_time = new Date().toISOString()
-  }
+  if (smoked) updateData.last_cigarette_time = new Date().toISOString()
 
   const { error: updateError } = await supabase.from("users").update(updateData).eq("id", userId)
+  if (updateError) return { error: updateError }
 
-  if (updateError) {
-    return { error: updateError }
-  }
-
-  // Log the smoking behavior
   return await supabase.from("smoke_logs").insert({
     user_id: userId,
     smoked,
@@ -54,21 +43,12 @@ export async function logSmoking(userId: string, smoked: boolean) {
 // Log breathing exercise completion
 export async function logBreathingExercise(userId: string) {
   const { data: userData, error: userError } = await supabase.from("users").select("xp").eq("id", userId).single()
+  if (userError) return { error: userError }
 
-  if (userError) {
-    return { error: userError }
-  }
-
-  // Add XP for completing breathing exercise
   const newXp = (userData?.xp || 0) + 5
-
   const { error: updateError } = await supabase.from("users").update({ xp: newXp }).eq("id", userId)
+  if (updateError) return { error: updateError }
 
-  if (updateError) {
-    return { error: updateError }
-  }
-
-  // Log the breathing exercise
   return await supabase.from("breathing_logs").insert({
     user_id: userId,
     completed: true,
@@ -105,10 +85,7 @@ export async function getReviews() {
 // Like a review
 export async function likeReview(reviewId: string) {
   const { data, error } = await supabase.from("reviews").select("likes_count").eq("id", reviewId).single()
-
-  if (error) {
-    return { error }
-  }
+  if (error) return { error }
 
   return await supabase
     .from("reviews")
@@ -167,6 +144,5 @@ export function calculateAllowedCigarettes(initialCount: number, currentWeek: nu
   const reductionRates = [0.25, 0.5, 0.65, 0.8, 0.9, 1]
   const reduction = reductionRates[currentWeek - 1] || 0
   const allowed = Math.ceil(initialCount * (1 - reduction))
-  return Math.max(allowed, 0) // Ensure we don't go below 0
+  return Math.max(allowed, 0)
 }
-
